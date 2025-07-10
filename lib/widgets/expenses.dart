@@ -16,25 +16,25 @@ class _ExpensesState extends State<Expenses> {
   final List<Expense> _registeredExpenses = [
     Expense(
       title: 'Flutter course',
-      amount: 19.99,
+      amount: 1500,
       date: DateTime.now(),
       category: Category.work,
     ),
     Expense(
       title: 'Cinema',
-      amount: 15.69,
+      amount: 950,
       date: DateTime.now(),
       category: Category.leisure,
     ),
     Expense(
       title: 'Pizza',
-      amount: 9.99,
+      amount: 1300,
       date: DateTime.now(),
       category: Category.food,
     ),
     Expense(
       title: 'Trip to CBD',
-      amount: 4.00,
+      amount: 200,
       date: DateTime.now(),
       category: Category.travel,
     ),
@@ -55,9 +55,26 @@ class _ExpensesState extends State<Expenses> {
   }
 
   void _removeExpense(Expense expense) {
+    final expenseIndex = _registeredExpenses.indexOf(expense);
+
     setState(() {
       _registeredExpenses.remove(expense);
     });
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 3),
+        content: const Text('Expense deleted.'),
+        action: SnackBarAction(
+          label: 'Undo',
+          onPressed: () {
+            setState(() {
+              _registeredExpenses.insert(expenseIndex, expense);
+            });
+          },
+        ),
+      ),
+    );
   }
 
   @override
